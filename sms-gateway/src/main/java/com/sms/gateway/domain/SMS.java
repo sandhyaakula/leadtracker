@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import java.util.regex.Matcher;
 
 @Entity
 public class SMS {
+	
 	@Id
-	private String trackerId;
+	@GeneratedValue
+	private long smsRequestId;
 		
 	private String message;
 	private Long from;
@@ -23,13 +26,16 @@ public class SMS {
 	
 	public SMS() {}
 			
-	public String getTrackerId() {
-		return trackerId;
+	
+	public long getSmsRequestId() {
+		return smsRequestId;
 	}
 
-	public void setTrackerId(String trackerId) {
-		this.trackerId = trackerId;
+
+	public void setSmsRequestId(long smsRequestId) {
+		this.smsRequestId = smsRequestId;
 	}
+
 
 	public String getMessage() {
 		return message;

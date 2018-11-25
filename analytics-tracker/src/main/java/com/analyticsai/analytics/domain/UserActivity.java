@@ -6,17 +6,28 @@ import javax.persistence.*;
 public class UserActivity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "activitySeq")
-    @SequenceGenerator(name = "activitySeq", sequenceName = "USER_LOG_SEQ")
-	private Long activityId;
+	private String activityId;
 	
 	private String trackingId;
+	
+	private String code;
 	
 	@Embedded
 	private TrackingData data;
 
 	public UserActivity() {}
 	
+	
+	public String getActivityId() {
+		return activityId;
+	}
+
+
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+	}
+
+
 	public String getTrackingId() {
 		return trackingId;
 	}
@@ -31,5 +42,15 @@ public class UserActivity {
 
 	public void setData(TrackingData data) {
 		this.data = data;
+	}
+
+
+	public String getCode() {
+		return code;
+	}
+
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 }

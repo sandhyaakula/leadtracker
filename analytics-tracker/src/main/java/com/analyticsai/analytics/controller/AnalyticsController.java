@@ -12,9 +12,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.analyticsai.analytics.domain.CampaignSummary;
 import com.analyticsai.analytics.domain.TrackingData;
 import com.analyticsai.analytics.domain.UserActivity;
 import com.analyticsai.analytics.repository.CampaignActivityRepository;
+import com.analyticsai.analytics.repository.CampaignSummaryRepository;
 import com.analyticsai.analytics.repository.UserActivityRepository;
 import com.analyticsai.analytics.service.CampaignService;
 
@@ -22,20 +24,29 @@ import com.analyticsai.analytics.service.CampaignService;
 @Controller
 @PropertySource("classpath:/application.properties")
 public class AnalyticsController {
-	
+	//
+	//@Autowired
+	//CampaignActivityRepository campaignActivity;
 	@Autowired
-	CampaignActivityRepository campaignActivity;
+	CampaignSummaryRepository summaryRepo;
 	
 	@Autowired
 	UserActivityRepository userActivity;
 	
 	@Autowired
-	CampaignService campaignService;
+	UrlRegistryService urlRegistry;
 	
-	@GetMapping("/{campaignId}/{trackingId}")
-	public String intecept(@PathVariable String campaignId,@PathVariable String trackingId, HttpServletResponse sResponse) throws IOException {
-	    sResponse.addCookie(new Cookie("trackingId", trackingId));
-	    return "redirect:"+campaignService.getLandingPage(campaignId);
+	@GetMapping("/{code}/{trackingId}")
+	public String intecept(@PathVariable String code,@PathVariable String trackingId, HttpServletResponse sResponse) throws IOException {
+		UserActivity activity = new UserActivity();
+		//activity.setActivityId(generatedValue);
+		activity.setTrackingId(trackingId);
+		activity.setData(null);
+		userActivity.save(activity);
+		
+		sResponse.addCookie(new Cookie("userId", activity.getActivityId().toString()));
+	  
+	    return "redirect:"+urlRegistry.getLandingPage(code);
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 3600)
@@ -44,7 +55,7 @@ public class AnalyticsController {
 		 String trackingId = "anonymous";
 		 List<HttpCookie> cookies = HttpCookie.parse(data.getCookie());
 		 for(HttpCookie cookie : cookies) {
-			 if("trackingId".equals(cookie.getName())) {
+			 if("userId".equals(cookie.getName())) {
 				 trackingId = cookie.getValue();
 			 }
 		 }
@@ -52,6 +63,5 @@ public class AnalyticsController {
 		 activity.setTrackingId(trackingId);
 		 activity.setData(data);
 		 userActivity.save(activity);
-		 System.out.println(data);
 	}
 }
