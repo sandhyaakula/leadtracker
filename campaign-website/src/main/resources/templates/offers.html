@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="/js/beacon-api.js"></script>
+	<script src="/js/script.js"></script>
+	<link rel="stylesheet" href="/css/style.css">
+	<title>Welcome to out exciting world of offers!</title>
+</head>
+<body onload="$beacon.send('start')" onunload="$beacon.send('end')">
+	<h1 id = "offers">Exciting New Year Offers for !</h1>
+	<p>
+		<button id ="enquire">
+			Know more!
+		</button>
+	</p>
+	<div id = "tracker"></div>
+	<div id = "content"></div>
+	<script type="text/javascript">
+			console.log("got the tracking id =" + document.cookie);
+	</script>
+</body>
+</html>
